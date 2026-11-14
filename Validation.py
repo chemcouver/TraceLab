@@ -1,2 +1,2 @@
-# Detect missing, invalid, duplicate, or out-of-order readings.
+# Detect missing, invalid, or duplicate readings.
 
