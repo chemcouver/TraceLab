@@ -1,3 +1,3 @@
 """
-Detect missing or invalid readings.
+Detect missing or invalid readings before cleaning and analysis.
 """

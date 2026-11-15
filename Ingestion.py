@@ -20,6 +20,18 @@ Expected output:
 import csv
 import json
 
+def validate_file(filepath, file_type):
+    """Validates the file type and calls the appropriate reading function."""
+    try:
+        if file_type == "csv":
+            read_csv(filepath)
+        elif file_type == "jsonl":
+            read_jsonl(filepath)
+        else:
+            raise ValueError("Unsupported file type. Please use 'csv' or 'jsonl'.")
+    except Exception as e:
+        print(f"An error occurred while processing the file: {e}")
+
 def read_csv(filepath):
     """Reads a CSV file and returns a list of dictionaries."""
     with open(filepath, mode="r", newline="", encoding="utf-8") as file:
@@ -40,20 +52,8 @@ def read_jsonl(filepath):
                 record = json.loads(line)
                 print(record)
 
-def validate_file(filepath, file_type):
-    """Validates the file type and calls the appropriate reading function."""
-    try:
-        if file_type == "csv":
-            read_csv(filepath)
-        elif file_type == "jsonl":
-            read_jsonl(filepath)
-        else:
-            raise ValueError("Unsupported file type. Please use 'csv' or 'jsonl'.")
-    except Exception as e:
-        print(f"An error occurred while processing the file: {e}")
-
-# demonstrate usage
+# Demonstration
 if __name__ == "__main__":
     # Example usage
     validate_file("readings.csv", "csv")
-    # validate_file("data.jsonl", "jsonl")
+    validate_file("readings.jsonl", "jsonl")
