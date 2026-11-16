@@ -28,7 +28,7 @@ def generate_csv_data(records, output_file):
 
         for _ in range(1, records):
             writer.writerow([
-                round(random.randint(1, 100)),  # sensor_id
+                round(random.randint(1, 10)),  # sensor_id
                 random_date(dt.datetime(2026, 11, 1, 10, 0, 0), dt.datetime(2026, 11, 1, 20, 0, 0)).isoformat(), # timestamp between 10:00:00 and 20:00:00
                 round(random.uniform(-60.0, 120.0), 2), # temperature
                 round(random.uniform(100.0, 1200.0), 2), # pressure
@@ -40,6 +40,3 @@ def random_date(start, end):
     return start + dt.timedelta(
         seconds = random.randint(0, int((end - start).total_seconds())),
     )
-
-if __name__ == "__main__":
-    generate_csv_data(20, "readings.csv")
