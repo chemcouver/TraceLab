@@ -30,6 +30,6 @@ def ingest_csv(filepath):
             for sensor_id in reader:
                 sensor_id = row.get("sensor_id")
                 if sensor_id == sensor:
-                    with open(f"{sensor_id}.txt", mode="a", encoding="utf-8") as sensor_file:
+                    with open(f"data\\output\\{sensor_id}.txt", mode="a", encoding="utf-8") as sensor_file:
                         reading = [row.get("timestamp"), row.get("temperature"), row.get("pressure"), row.get("windspeed")]
                         sensor_file.write(reading + ", " + "\n")
