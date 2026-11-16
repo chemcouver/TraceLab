@@ -1,13 +1,15 @@
 """
-This program generates example data in .csv and .jsonl file formats. 
+This program generates example data in the .csv format. 
 
 It will be used in TraceLab to demonstrate the ingestion, validation, and analysis of sensor readings.
 
 Datasets will be generated with the following fields:
-- timestamp: Datetime
 - sensor_id: String
+- timestamp: Datetime
 - temperature: Float
-- humidity: Float
+- pressure: Float
+- windspeed: Float
+
 The generated data is written to a new output file in the chosen format.
 """
 
@@ -16,34 +18,21 @@ import json
 import random
 import datetime as dt
 
-fields = ["timestamp", "sensor_id", "temperature", "humidity", "pressure"]
-
-def generate_jsonl_data(records, output_file):
-    """Generates random sensor readings"""
-    with open(output_file, mode="w", encoding="utf-8") as f:
-        for _ in range(1, records):
-            data = {
-                "timestamp": random_date(dt.datetime(2026, 11, 1), dt.datetime(2026, 11, 4)).isoformat(),
-                "sensor_id": f"sensor_{random.randint(1, 10)}",
-                "temperature": round(random.uniform(-60.0, 120.0), 2),
-                "humidity": round(random.uniform(0.0, 100.0), 2),
-                "pressure": round(random.uniform(1000.0, 1100.0), 2)
-            }
-            f.write(json.dumps(data) + "\n")
+fields = ["sensor_id", "timestamp", "temperature", "pressure", "windspeed"]
 
 def generate_csv_data(records, output_file):
     """Generates random sensor readings"""
     with open(output_file, mode="w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(fields) # Initial columns
+        writer.writerow(fields) # Initial header row
 
         for _ in range(1, records):
             writer.writerow([
-                random_date(dt.datetime(2026, 11, 1), dt.datetime(2026, 11, 4)).isoformat(),
-                f"sensor_{random.randint(1, 10)}",
-                round(random.uniform(-60.0, 120.0), 2),
-                round(random.uniform(0.0, 100.0), 2),
-                round(random.uniform(1000.0, 1100.0), 2)
+                round(random.randint(1, 100)),  # sensor_id
+                random_date(dt.datetime(2026, 11, 1, 10, 0, 0), dt.datetime(2026, 11, 1, 20, 0, 0)).isoformat(), # timestamp between 10:00:00 and 20:00:00
+                round(random.uniform(-60.0, 120.0), 2), # temperature
+                round(random.uniform(100.0, 1200.0), 2), # pressure
+                round(random.uniform(0.0, 100.0), 2) # windspeed
             ])
 
 def random_date(start, end):
@@ -54,4 +43,3 @@ def random_date(start, end):
 
 if __name__ == "__main__":
     generate_csv_data(20, "readings.csv")
-    generate_jsonl_data(20, "readings.jsonl")

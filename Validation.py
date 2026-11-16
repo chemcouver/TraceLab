@@ -2,6 +2,6 @@
 Detect valid, invalid, or suspicious readings.
 
 Input: Individual sensor .txt files
-Output: Validated data and invalid-readings file
+Output: Validated and cleaned data, and an invalid readings file
 """
 
