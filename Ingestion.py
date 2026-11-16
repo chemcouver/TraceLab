@@ -1,13 +1,8 @@
 """
-Handles ingestion of data provided in .csv and .jsonl file formats.
+Read CSV/JSONL data, normalize records, and group by sensor ID.
 
-Expected input:
-- .csv file: A standard CSV file with headers in the first row.
-- .jsonl file: A JSON Lines file where each line is a valid JSON object
-
-Expected output:
-- For .csv files: Each row will be converted to a dictionary and exported to a text file.
-- For .jsonl files: Each line will be parsed as a JSON object and exp
+Input: .csv or .jsonl data files
+Output: individual sensor .txt files
 """
 
 import csv

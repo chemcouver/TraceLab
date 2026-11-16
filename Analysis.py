@@ -1,5 +1,8 @@
 """
-Calculate mean and median, standard deviation, and minimum and maximums.
+Calculate statistics and identify suspicious patterns
+
+Input: Validated data and invalid-readings file
+Output: Statistical analysis and abnormal readings report
 """
 
 import numpy as np

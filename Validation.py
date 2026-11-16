@@ -1,4 +1,7 @@
 """
-Detect missing or duplicate fields, validate data types, and check for out-of-range values in the datasets.
+Detect valid, invalid, or suspicious readings.
+
+Input: Individual sensor .txt files
+Output: Validated data and invalid-readings file
 """
 
