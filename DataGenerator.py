@@ -16,7 +16,7 @@ import json
 import random
 import datetime as dt
 
-init_columns = ["timestamp", "sensor_id", "temperature", "humidity", "pressure"]
+fields = ["timestamp", "sensor_id", "temperature", "humidity", "pressure"]
 
 def generate_jsonl_data(records, output_file):
     """Generates random sensor readings"""
@@ -35,7 +35,7 @@ def generate_csv_data(records, output_file):
     """Generates random sensor readings"""
     with open(output_file, mode="w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(init_columns) # Initial columns
+        writer.writerow(fields) # Initial columns
 
         for _ in range(1, records):
             writer.writerow([

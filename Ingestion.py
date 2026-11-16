@@ -1,20 +1,13 @@
 """
-Handles ingestion of data from .csv and .jsonl files.
-
-The datasets from either file type should include these fields:
-- timestamp: Datetime
-- sensor_id: String
-- temperature: Float
-- humidity: Float
-- pressure: Float
+Handles ingestion of data provided in .csv and .jsonl file formats.
 
 Expected input:
 - .csv file: A standard CSV file with headers in the first row.
 - .jsonl file: A JSON Lines file where each line is a valid JSON object
 
 Expected output:
-- For .csv files: Each row will be converted to a dictionary and printed to the
-- For .jsonl files: Each line will be parsed as a JSON object and printed to the console.
+- For .csv files: Each row will be converted to a dictionary and exported to a text file.
+- For .jsonl files: Each line will be parsed as a JSON object and exp
 """
 
 import csv
@@ -38,7 +31,6 @@ def read_csv(filepath):
         # DictReader uses the first row as dictionary keys
         reader = csv.DictReader(file)
         for row in reader:
-            # print(dict(row))
             with open("result.txt", "a", encoding="utf-8") as file:
                 file.write(str(dict(row)) + "\n")
         print("CSV file read successfully, with data written to result.txt")
@@ -50,10 +42,3 @@ def read_jsonl(filepath):
             # Skip empty lines
             if line.strip():
                 record = json.loads(line)
-                print(record)
-
-# Demonstration
-if __name__ == "__main__":
-    # Example usage
-    validate_file("readings.csv", "csv")
-    validate_file("readings.jsonl", "jsonl")

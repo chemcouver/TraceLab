@@ -1,4 +1,6 @@
 """
-Calculate averages, medians, standard deviations, minimums and maximums.
+Calculate mean and median, standard deviation, and minimum and maximums.
 """
- 
+
+import numpy as np
+
