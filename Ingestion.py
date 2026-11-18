@@ -7,22 +7,23 @@ Output: individual sensor .txt files
 
 import csv
 import json
+from pathlib import Path
 
-def ingest(filepath, file_type):
-    """Validates the file type and calls the appropriate reading function."""
+def ingest(filepath):
+    """Validates the file type and calls the appropriate ingestion function."""
     try:
-        if file_type == "csv":
+        if Path(filepath).suffix.lower() == ".csv":
             ingest_csv(filepath)
         else:
-            raise ValueError("Unsupported file type. Please use 'csv' or 'jsonl'.")
+            raise ValueError("Unsupported file type.")
     except Exception as e:
-        print(f"An error occurred while processing the file: {e}")
+        print(f"An error occurred while ingesting the file: {e}")
 
 def ingest_csv(filepath):
-    """Reads CSV records and writes them to one JSONL file per sensor ID."""
+    """Ingests CSV records by reformatting each sensor's records into JSONL separately."""
+    sensor_readings = {}
     with open(filepath, mode="r", newline="", encoding="utf-8") as file:
         reader = csv.DictReader(file)
-        sensor_readings = {}
 
         for row in reader:
             sensor_id = row.get("sensor_id")
@@ -33,8 +34,8 @@ def ingest_csv(filepath):
         with open(f"data\\output\\{sensor_id}.jsonl", mode="w", encoding="utf-8") as sensor_file:
             for reading in readings:
                 sensor_file.write(json.dumps(reading) + "\n")
-
 '''
+# debugging
 if __name__ == "__main__":
-    ingest("data\\input\\readings.csv", "csv")
+    ingest("data\\input\\readings.csv")
 '''

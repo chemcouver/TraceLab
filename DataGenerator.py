@@ -21,7 +21,7 @@ import datetime as dt
 fields = ["sensor_id", "timestamp", "temperature", "pressure", "windspeed"]
 
 def generate_csv_data(records, output_file):
-    """Generates random sensor readings"""
+    """Generates random sensor readings in a CSV file"""
     with open(output_file, mode="w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(fields) # Initial header row
