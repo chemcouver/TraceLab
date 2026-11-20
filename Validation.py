@@ -10,8 +10,12 @@ import datetime as dt
 import json
 
 raw_readings_data = Path("data") / "output"
+
 validated_readings_data = Path("data") / "output" / "validated"
 validated_readings_data.mkdir(parents=True, exist_ok=True)
+
+cleaned_data = Path("data") / "output" / "cleaned"
+cleaned_data.mkdir(parents=True, exist_ok=True)
 
 required_fields = ["sensor_id", "timestamp", "temperature", "pressure", "windspeed"]
 
@@ -54,7 +58,7 @@ def validate_readings_jsonl(reading):
             # Find any missing fields
             missing_fields = [
                 field for field in required_fields
-               if field not in record or record[field] in (None, "")
+                if field not in record or record[field] in (None, "")
             ]
 
             # If there's missing fields, reading is rejected
@@ -86,8 +90,51 @@ def validate_readings_jsonl(reading):
             for record in invalid_readings:
                 invalid_sensor_readings.write(json.dumps(record) + "\n")
 
+def clean():
+    """
+    Sort validated readings by sensor ID and timestamp.
+
+    Output: data/output/clean/readings.jsonl
+    """
+
+    valid_file = validated_readings_data / "valid_readings.jsonl"
+    readings = []
+    if not valid_file.exists():
+        print("No validated readings found.")
+        return
+
+    with open(valid_file, mode="r", encoding="utf-8") as file:
+        for line in file:
+            if line.strip():
+                readings.append(json.loads(line))
+
+    # Normalize timestamps for chronological comparison.
+    def sort_key(record):
+        sensor_id = record["sensor_id"]
+
+        # Numeric sorting for IDs such as 1, 2, 10.
+        try:
+            sensor_key = (0, int(sensor_id), sensor_id)
+        except ValueError:
+            sensor_key = (1, sensor_id, "")
+
+        timestamp = dt.datetime.fromisoformat(record["timestamp"])
+
+        # Treat naive timestamps as UTC for consistent sorting.
+        if timestamp.tzinfo is None:
+            timestamp = timestamp.replace(tzinfo=dt.timezone.utc)
+
+        timestamp = timestamp.astimezone(dt.timezone.utc)
+        return (sensor_key, timestamp)
+
+    readings.sort(key=sort_key)
+
+    with open(cleaned_data / "cleaned_readings.jsonl", mode="a", encoding="utf-8") as clean_readings:
+        for record in readings:
+            clean_readings.write(json.dumps(record) + "\n")
+
 '''
 # debugging
 if __name__ == "__main__":
-    validate()
+    clean()
 '''
