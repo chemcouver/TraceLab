@@ -1,8 +1,8 @@
 """
 Detect valid, invalid, or suspicious readings, and clean them.
 
-Input: Individual sensor .txt files
-Output: Validated and cleaned data, and an invalid readings file
+Input: Individual sensor .txt files.
+Output: Validated and cleaned data, and an invalid readings file.
 """
 
 from pathlib import Path
@@ -82,32 +82,17 @@ def validate_readings_jsonl(reading):
 
             valid_readings.append(record)
 
-        with open(validated_readings_data / "valid_readings.jsonl", mode="a", encoding="utf-8") as valid_sensor_readings:
-            for record in valid_readings:
-                valid_sensor_readings.write(json.dumps(record) + "\n")
+        output = (("valid_readings.jsonl", valid_readings), ("invalid_readings.jsonl", invalid_readings))
 
-        with open(validated_readings_data / "invalid_readings.jsonl", mode="a", encoding="utf-8") as invalid_sensor_readings:
-            for record in invalid_readings:
-                invalid_sensor_readings.write(json.dumps(record) + "\n")
+        for file, readings in output:
+            with open(validated_readings_data / file, mode="a", encoding="utf-8") as output_file:
+                for record in readings:
+                    output_file.write(json.dumps(record) + "\n")
 
 def clean():
     """
-    Sort validated readings by sensor ID and timestamp.
-
-    Output: data/output/clean/readings.jsonl
+    Sort valid and invalid readings in place by sensor ID and timestamp.
     """
-
-    valid_file = validated_readings_data / "valid_readings.jsonl"
-    readings = []
-    if not valid_file.exists():
-        print("No validated readings found.")
-        return
-
-    with open(valid_file, mode="r", encoding="utf-8") as file:
-        for line in file:
-            if line.strip():
-                readings.append(json.loads(line))
-
     # Normalize timestamps for chronological comparison.
     def sort_key(record):
         sensor_id = record["sensor_id"]
@@ -127,11 +112,19 @@ def clean():
         timestamp = timestamp.astimezone(dt.timezone.utc)
         return (sensor_key, timestamp)
 
-    readings.sort(key=sort_key)
+    for filename in ("valid_readings.jsonl", "invalid_readings.jsonl"):
+        validated_file = validated_readings_data / filename
+        if not validated_file.exists():
+            continue
 
-    with open(cleaned_data / "cleaned_readings.jsonl", mode="a", encoding="utf-8") as clean_readings:
-        for record in readings:
-            clean_readings.write(json.dumps(record) + "\n")
+        with open(validated_file, mode="r", encoding="utf-8") as file:
+            readings = [json.loads(line) for line in file if line.strip()]
+
+        readings.sort(key=sort_key)
+
+        with open(validated_file, mode="w", encoding="utf-8") as file:
+            for record in readings:
+                file.write(json.dumps(record) + "\n")
 
 '''
 # debugging

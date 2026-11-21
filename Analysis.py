@@ -1,8 +1,8 @@
 """
-Calculate statistics and identify suspicious patterns
+Statistical analysis for the readings
 
-Input: Validated data and invalid-readings file
-Output: Statistical analysis and abnormal readings
+Input: Valid/invalid readings.
+Output: Statistical summary for both the valid and invalid readings.
 """
 
 import numpy as np

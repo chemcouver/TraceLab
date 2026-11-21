@@ -1,8 +1,8 @@
 """
 Read CSV data, normalize records, and group by sensor ID.
 
-Input: .csv data file
-Output: individual sensor .txt files
+Input: .csv data file.
+Output: individual sensor .txt files.
 """
 
 import csv
