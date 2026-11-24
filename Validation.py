@@ -39,7 +39,7 @@ def validate():
                 raise ValueError(f"Unsupported file type: {reading}")
         except Exception as e:
             # Suppress exceptions for folders
-            if (reading == validated_readings_data):
+            if (reading == validated_readings_data or reading == cleaned_data):
                 continue
             else:
                 print(f"An error occurred while validating the file: {e}")
